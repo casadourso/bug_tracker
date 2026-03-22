@@ -139,20 +139,6 @@ export default function Home() {
           <h2 className="text-2xl font-serif mb-2">Ticket Criado!</h2>
           <p className="text-gray-500 mb-6">Seu ticket foi adicionado ao Notion</p>
           
-          {ticketUrl && (
-            <a 
-              href={ticketUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded-full font-semibold mb-4 hover:bg-gray-800 transition"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M4 4h10v2H6v12h12v-8h2v10H4V4zm12 0h4v4h-2V6.4l-7.3 7.3-1.4-1.4L16.6 6H14V4z"/>
-              </svg>
-              Ver no Notion
-            </a>
-          )}
-          
           <div className="flex gap-3 justify-center mt-4">
             <button
               onClick={clearForm}

@@ -6,12 +6,12 @@ Formulário web para reportar bugs e melhorias, com integração direta ao Notio
 
 ### Passo 1: Criar Integração no Notion
 
-1. Acesse [notion.so/my-integrations](https://www.notion.so/my-integrations)
-2. Clique em **"+ Nova integração"**
-3. Dê um nome: `Bug Tracker Casa do Urso`
-4. Selecione o workspace da Casa do Urso
-5. Clique em **"Enviar"**
-6. **Copie o "Internal Integration Secret"** (começa com `secret_`)
+1. **Dentro do Notion**, vá em **Configurações** (ícone ⚙️ na barra lateral) → aba **Conexões**
+2. Role até o final e clique em **"Desenvolver suas próprias integrações"**
+3. Clique em **"+ Nova integração"**
+4. Nome: `Bug Tracker Casa do Urso`, selecione o workspace
+5. **Para pegar o token**: volte ao Notion → **Configurações** → **Conexões** → encontre sua integração na lista → clique nos **três pontinhos (•••)** ao lado → **"Copiar token de integração interna"**
+6. O token começa com `secret_` ou `ntn_`
 
 ### Passo 2: Conectar a Integração ao Database
 
@@ -98,9 +98,14 @@ Edite `app/page.tsx` (formulário) e `app/api/ticket/route.ts` (API)
 
 ## ❓ Problemas Comuns
 
+**"API token is invalid"**
+- Pegue o token em **Configurações** → **Conexões** → ••• na sua integração → "Copiar token" (não use o token da aba Configuration do notion.so/my-integrations)
+- O database precisa estar no **mesmo workspace** da integração
+- Reinicie o servidor após alterar o .env
+
 **"Erro ao criar ticket"**
-- Verifique se a integração está conectada ao database no Notion
-- Confira se o NOTION_TOKEN está correto no Vercel
+- Verifique se a integração está conectada ao database (••• no database → Conexões → adicionar integração)
+- Confira se o NOTION_TOKEN está correto
 
 **"Database not found"**
 - O NOTION_DATABASE_ID pode estar errado
