@@ -1,15 +1,20 @@
 import { Client } from '@notionhq/client'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Inicializa cliente do Notion
-const notion = new Client({
-  auth: process.env.NOTION_TOKEN,
-})
-
-// ID do database Bug Tracker (do seu Notion)
+const NOTION_TOKEN = process.env.NOTION_TOKEN
 const DATABASE_ID = process.env.NOTION_DATABASE_ID || '06157c2e-128c-4f6d-8452-61d2c981b74b'
 
 export async function POST(request: NextRequest) {
+  // Valida credenciais do Notion
+  if (!NOTION_TOKEN || NOTION_TOKEN === 'secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx') {
+    return NextResponse.json({
+      success: false,
+      error: 'Configure o NOTION_TOKEN no arquivo .env. Crie uma integração em notion.so/my-integrations e adicione o token.'
+    }, { status: 500 })
+  }
+
+  const notion = new Client({ auth: NOTION_TOKEN })
+
   try {
     const body = await request.json()
     
@@ -173,10 +178,20 @@ export async function POST(request: NextRequest) {
 
   } catch (error: any) {
     console.error('Erro ao criar ticket no Notion:', error)
-    
+
+    // Mensagens amigáveis para erros comuns do Notion
+    let userMessage = error.message || 'Erro ao conectar com o Notion'
+    if (error.code === 'unauthorized' || error.message?.includes('Invalid token')) {
+      userMessage = 'Token do Notion inválido. Verifique o NOTION_TOKEN no .env'
+    } else if (error.code === 'object_not_found' || error.message?.includes('Could not find')) {
+      userMessage = 'Database não encontrado. Verifique o NOTION_DATABASE_ID e se a integração tem acesso ao database'
+    } else if (error.message?.includes('validation_error')) {
+      userMessage = 'Estrutura do database incompatível. Confira se as propriedades (Título, Tipo, Status, etc.) existem no Notion'
+    }
+
     return NextResponse.json({
       success: false,
-      error: error.message || 'Erro interno do servidor'
+      error: userMessage
     }, { status: 500 })
   }
 }
