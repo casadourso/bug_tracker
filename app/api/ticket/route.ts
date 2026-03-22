@@ -1,15 +1,15 @@
 import { Client } from '@notionhq/client'
 import { NextRequest, NextResponse } from 'next/server'
 
-const NOTION_TOKEN = process.env.NOTION_TOKEN
-const DATABASE_ID = process.env.NOTION_DATABASE_ID || '06157c2e-128c-4f6d-8452-61d2c981b74b'
-
 export async function POST(request: NextRequest) {
+  const NOTION_TOKEN = process.env.NOTION_TOKEN
+  const DATABASE_ID = process.env.NOTION_DATABASE_ID || '06157c2e-128c-4f6d-8452-61d2c981b74b'
+
   // Valida credenciais do Notion
   if (!NOTION_TOKEN || NOTION_TOKEN === 'secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx') {
     return NextResponse.json({
       success: false,
-      error: 'Configure o NOTION_TOKEN no arquivo .env. Crie uma integração em notion.so/my-integrations e adicione o token.'
+      error: 'NOTION_TOKEN não configurado. No Vercel: Settings → Environment Variables → adicione NOTION_TOKEN e NOTION_DATABASE_ID → faça Redeploy.'
     }, { status: 500 })
   }
 
